@@ -41,9 +41,6 @@ describe Travis::CLI::Encrypt do
     stderr.should_not match(/WARNING/)
   end
 
-  example "travis encrypt FOO bar -a" do
-    described_class.any_instance.stub(:save_travis_config)
-    run_cli("encrypt", "FOO", "bar", "-a").should be_success
-    stderr.should match(/Environment variables in env\.global should be formatted as FOO=bar/)
+
   end
 end
