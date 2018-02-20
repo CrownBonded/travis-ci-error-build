@@ -205,17 +205,6 @@ module Travis
       end
 
       def basic_auth(user, password, die = true, otp = nil, &block)
-        gh = GH.with(:username => user, :password => password)
-        with_otp(gh, user, otp, &block)
-      rescue GH::Error => error
-        raise gh_error(error) if die
-      end
-
-      def login(user, password, die = true, otp = nil)
-        basic_auth(user, password, die, otp) do |gh, new_otp|
-          reply         = create_token(gh)
-          auth_href     = reply['_links']['self']['href']
-          self.callback = proc { with_otp(gh, user, new_otp) { |g| g.delete(auth_href) } } if drop_token
           reply['token']
         end
       end
