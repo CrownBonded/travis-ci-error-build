@@ -59,7 +59,7 @@ module Travis
         clear_cache!
         self.connection = Faraday.new(:url => uri, :ssl => ssl) do |faraday|
           faraday.request  :url_encoded
-          faraday.response :logger if debug_http
+          faraday.response :logger
           faraday.adapter(*faraday_adapter)
         end
       end
@@ -331,8 +331,8 @@ module Travis
 
         def check_ssl
           raw(:head, '/') if ssl == SSL_OPTIONS
-        rescue SSLError => error
-          self.ssl = {}
+        rescue Exception => error
+          self.ssl = {} if error.class == Travis::Client::SSLError
         end
     end
   end
